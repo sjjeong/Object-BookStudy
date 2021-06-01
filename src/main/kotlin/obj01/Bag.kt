@@ -5,6 +5,7 @@ class Bag(
     private var amount: Long
 ) {
     var ticket: Ticket? = null
+        private set
 
     val hasInvitation: Boolean
         get() = invitation != null
@@ -12,11 +13,20 @@ class Bag(
     val hasTicket: Boolean
         get() = ticket != null
 
-    fun minusAmount(amount: Long) {
+    fun hold(ticket: Ticket): Long {
+        this.ticket = ticket
+        return if (hasInvitation) {
+            0L
+        } else {
+            ticket.fee.also(::minusAmount)
+        }
+    }
+
+    private fun minusAmount(amount: Long) {
         this.amount -= amount
     }
 
-    fun plusAmount(amount: Long) {
+    private fun plusAmount(amount: Long) {
         this.amount += amount
     }
 }
